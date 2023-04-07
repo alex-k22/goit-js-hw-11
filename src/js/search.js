@@ -10,8 +10,6 @@ const searchQueryEl = document.querySelector('#request');
 const searchFormEl = document.querySelector('#search-form');
 const galleryEl = document.querySelector('.gallery');
 
-const DEBOUNCE_DELAY = 300;
-
 const pixabay = new pixabayAPI();
 
 const handleSearchPhotos = event => {
@@ -23,14 +21,14 @@ const handleSearchPhotos = event => {
 
   pixabay
     .fetchPhotos()
-    .then(data => {
+    .then(({data}) => {
+        console.log(data)
       if (!data.hits.length) {
         console.log(data.hits.length);
         throw new Error();
       }
       galleryEl.innerHTML = createGalleryCards(data.hits);
-      console.log(data); // should be DELETED!!!
-
+      
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
 
       const totalPages = Math.ceil(data.totalHits / pixabay.per_page);
@@ -49,7 +47,7 @@ const handleSearchPhotos = event => {
 const handleLoadMore = () => {
   pixabay.page += 1;
 
-  pixabay.fetchPhotos().then(data => {
+  pixabay.fetchPhotos().then(({data}) => {
     galleryEl.insertAdjacentHTML('beforeend', createGalleryCards(data.hits));
     const totalPages = Math.ceil(data.totalHits / pixabay.per_page);
 
