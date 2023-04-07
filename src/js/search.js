@@ -2,6 +2,8 @@ import Notiflix from 'notiflix';
 import debounce from 'lodash.debounce';
 import { pixabayAPI } from './pixabay-api';
 import createGalleryCards from '../templates/gallery-card.hbs';
+import simpleLightbox from 'simplelightbox';
+import "simplelightbox/dist/simple-lightbox.min.css"
 
 Notiflix.Notify.init({ position: 'center-top', distance: '50px', });
 
@@ -11,6 +13,8 @@ const searchFormEl = document.querySelector('#search-form');
 const galleryEl = document.querySelector('.gallery');
 
 const pixabay = new pixabayAPI();
+
+const gallery = new simpleLightbox('.gallery a');
 
 const handleSearchPhotos = event => {
   event.preventDefault();
@@ -69,3 +73,5 @@ const handleLoadMore = () => {
 
 searchFormEl.addEventListener('submit', handleSearchPhotos);
 loadMoreBtn.addEventListener('click', handleLoadMore);
+
+// let gallery = new SimpleLightbox('.gallery a');

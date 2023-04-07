@@ -11,7 +11,7 @@ export class pixabayAPI {
 
   q = null;
   page = 1;
-  per_page = 20;
+  per_page = 40;
 
   fetchPhotos() {
 
