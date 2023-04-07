@@ -1,27 +1,73 @@
-import Notiflix from "notiflix";
-import debounce from "lodash.debounce";
-import { unsplashAPI } from "./pixabay-api";
+import Notiflix from 'notiflix';
+import debounce from 'lodash.debounce';
+import { pixabayAPI } from './pixabay-api';
+import createGalleryCards from '../templates/gallery-card.hbs';
 
-Notiflix.Notify.init({ position: 'center-top' });
+Notiflix.Notify.init({ position: 'center-top', distance: '50px', });
 
 const loadMoreBtn = document.querySelector('.load__more');
 const searchQueryEl = document.querySelector('#request');
 const searchFormEl = document.querySelector('#search-form');
+const galleryEl = document.querySelector('.gallery');
 
 const DEBOUNCE_DELAY = 300;
 
-const handleSubmit = (event)=> {
-    event.preventDefault();
-    console.log(searchQueryEl.value);
-    loadMoreBtn.classList.remove("is-hidden");
-    const result = new unsplashAPI;
-    result.q = searchQueryEl.value;
-    console.log(result.fetchPhotos());
-}
+const pixabay = new pixabayAPI();
+
+const handleSearchPhotos = event => {
+  event.preventDefault();
+  galleryEl.innerHTML = '';
+
+  const searchQuery = searchQueryEl.value.trim();
+  pixabay.q = searchQuery;
+
+  pixabay
+    .fetchPhotos()
+    .then(data => {
+      if (!data.hits.length) {
+        console.log(data.hits.length);
+        throw new Error();
+      }
+      galleryEl.innerHTML = createGalleryCards(data.hits);
+      console.log(data); // should be DELETED!!!
+
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+
+      const totalPages = Math.ceil(data.totalHits / pixabay.per_page);
+      if (totalPages === pixabay.page) {
+        return;
+      }
+
+      loadMoreBtn.classList.remove('is-hidden');
+    })
+    .catch(() => {
+      loadMoreBtn.classList.add('is-hidden');
+      Notiflix.Notify.failure('Images not found!');
+    });
+};
 
 const handleLoadMore = () => {
-    
-}
+  pixabay.page += 1;
 
-searchFormEl.addEventListener('submit', handleSubmit);
+  pixabay.fetchPhotos().then(data => {
+    galleryEl.insertAdjacentHTML('beforeend', createGalleryCards(data.hits));
+    const totalPages = Math.ceil(data.totalHits / pixabay.per_page);
+
+    const { height: cardHeight } = document
+      .querySelector('.gallery')
+      .firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+
+    if (totalPages === pixabay.page) {
+      loadMoreBtn.classList.add('is-hidden');
+      Notiflix.Notify.warning(`We're sorry, but you've reached the end of search results.`);
+    }
+  });
+};
+
+searchFormEl.addEventListener('submit', handleSearchPhotos);
 loadMoreBtn.addEventListener('click', handleLoadMore);
