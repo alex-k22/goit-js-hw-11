@@ -14,7 +14,6 @@ export class pixabayAPI {
   per_page = 40;
 
   fetchPhotos() {
-
     return axios.get(`${this.#BASE_URL}`, {
       params: {
         ...this.#BASE_SEARCH_PARAMS,

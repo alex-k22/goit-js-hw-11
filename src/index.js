@@ -1,1 +1,2 @@
-import './js/search'
+import './js/gallery'
+import './js/pixabay-api'
