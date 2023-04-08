@@ -5,8 +5,6 @@ import createGalleryCards from '../templates/gallery-card.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-Notiflix.Notify.init({ position: 'center-center', cssAnimationStyle:'zoom' });
-
 const loadMoreBtn = document.querySelector('.load__more');
 const searchQueryEl = document.querySelector('#request');
 const searchFormEl = document.querySelector('#search-form');
@@ -20,9 +18,16 @@ let gallery = new SimpleLightbox('.gallery a');
 const handleSearchPhotos = async event => {
   event.preventDefault();
   galleryEl.innerHTML = '';
+  pixabay.page = 1;
   loadMoreBtn.classList.add('is-hidden');
 
   const searchQuery = searchQueryEl.value.trim();
+  if (!searchQuery) {
+    Notiflix.Notify.failure('Please check your query!');
+    searchQueryEl.value = "";
+    return;
+  }
+  
   pixabay.q = searchQuery;
 
   try {
