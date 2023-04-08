@@ -58,8 +58,7 @@ const handleSearchPhotos = async event => {
 
 const handleLoadMore = async () => {
   pixabay.page += 1;
-  gallery.refresh();
-
+  
   try {
     const { data } = await pixabay.fetchPhotos();
 
@@ -71,6 +70,7 @@ const handleLoadMore = async () => {
       );
     }
     galleryEl.insertAdjacentHTML('beforeend', createGalleryCards(data.hits));
+    gallery.refresh();
   } catch (err) {
     console.log(err);
   }

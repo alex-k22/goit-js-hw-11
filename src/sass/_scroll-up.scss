@@ -1,0 +1,30 @@
+// Scroll to top button
+
+.up__btn {
+  display: none;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  font-size: 14px;
+  border: 2px solid white;
+  border-radius: 50%;
+  outline: none;
+  background-color: #1e90ff;
+  padding: 12px;
+  transform: scale(1);
+  //box-shadow:0 0 15px rgba(255,255,255,.4);
+  outline: 1px solid #1e90ff;
+  transition: transform .25s cubic-bezier(.075,.82,.165,1);
+}
+
+.up__btn:hover {
+  transform: scale(1.1);
+}
+.up__img {
+fill: white;
+background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 32 32'%3E%3Ctitle%3Eup-arrow%3C/title%3E%3Cpath d='M16.477 15.534c-0.26-0.26-0.68-0.26-0.94 0l-15.346 15.339c-0.253 0.267-0.247 0.687 0.013 0.94 0.26 0.247 0.667 0.247 0.927 0l14.872-14.866 14.866 14.866c0.267 0.253 0.687 0.247 0.94-0.013 0.247-0.26 0.247-0.667 0-0.927l-15.333-15.339z'%3E%3C/path%3E%3Cpath d='M1.138 16.475l14.866-14.866 14.866 14.866c0.267 0.253 0.687 0.247 0.94-0.013 0.247-0.26 0.247-0.667 0-0.927l-15.333-15.339c-0.26-0.26-0.68-0.26-0.94 0l-15.346 15.339c-0.253 0.267-0.247 0.687 0.013 0.94 0.267 0.253 0.674 0.253 0.934 0z'%3E%3C/path%3E%3C/svg%3E");
+}
+
