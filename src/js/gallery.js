@@ -2,11 +2,10 @@ import Notiflix from 'notiflix';
 import debounce from 'lodash.debounce';
 import { pixabayAPI } from './pixabay-api';
 import createGalleryCards from '../templates/gallery-card.hbs';
-import 'simplelightbox';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-Notiflix.Notify.init({ position: 'center-top', distance: '50px' });
+Notiflix.Notify.init({ position: 'center-center', cssAnimationStyle:'zoom' });
 
 const loadMoreBtn = document.querySelector('.load__more');
 const searchQueryEl = document.querySelector('#request');
@@ -15,9 +14,12 @@ const galleryEl = document.querySelector('.gallery');
 
 const pixabay = new pixabayAPI();
 
+let gallery = new SimpleLightbox('.gallery a');
+
 const handleSearchPhotos = async event => {
   event.preventDefault();
   galleryEl.innerHTML = '';
+  loadMoreBtn.classList.add('is-hidden');
 
   const searchQuery = searchQueryEl.value.trim();
   pixabay.q = searchQuery;
@@ -34,6 +36,8 @@ const handleSearchPhotos = async event => {
 
     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
 
+    gallery.refresh();
+
     const totalPages = Math.ceil(data.totalHits / pixabay.per_page);
     if (totalPages === pixabay.page) {
       return;
@@ -48,6 +52,7 @@ const handleSearchPhotos = async event => {
 
 const handleLoadMore = async () => {
   pixabay.page += 1;
+  gallery.refresh();
 
   try {
     const { data } = await pixabay.fetchPhotos();
@@ -68,13 +73,13 @@ const handleLoadMore = async () => {
 searchFormEl.addEventListener('submit', handleSearchPhotos);
 loadMoreBtn.addEventListener('click', handleLoadMore);
 
-const { height: cardHeight } = document
-  .querySelector('.gallery')
-  .firstElementChild.getBoundingClientRect();
+// const { height: cardHeight } = document
+//   .querySelector(".gallery")
+//   .firstElementChild.getBoundingClientRect();
 
-window.scrollBy({
-  top: cardHeight * 2,
-  behavior: 'smooth',
-});
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: "smooth",
+// });
 
-let gallery = new SimpleLightbox('.gallery a');
+
