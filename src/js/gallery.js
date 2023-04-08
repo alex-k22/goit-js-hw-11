@@ -12,6 +12,7 @@ const searchQueryEl = document.querySelector('#request');
 const searchFormEl = document.querySelector('#search-form');
 const galleryEl = document.querySelector('.gallery');
 
+searchQueryEl.focus();
 const pixabay = new pixabayAPI();
 
 let gallery = new SimpleLightbox('.gallery a');
